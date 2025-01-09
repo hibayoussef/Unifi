@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { pdfjs } from "react-pdf";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import App from "./App";
@@ -13,8 +13,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@3.0.279/buil
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, 
-      retry: false
+      refetchOnWindowFocus: false,
+      retry: false,
     },
   },
 });

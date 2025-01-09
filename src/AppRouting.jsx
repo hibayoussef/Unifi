@@ -1,44 +1,40 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Loader from "./components/shared/Loader";
-import AuthRedirect from "./middlewares/AuthRedirect";
-import Home from "./pages/home";
+import ShouldNotBeLogged from "./middlewares/ShouldNotBeLogged";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ShouldBeLogged from "middlewares/ShouldBeLogged";
 
-// import Login from "./pages/auth/pages/Login";
-// import Register from "./pages/registerForms/pages/register";
-// import {
-//     CreateAccount
-// } from "../src/routes/route";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 const AppRouting = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      {/* <Route
-        path="/login"
-        element={
-          <AuthRedirect shouldBeLogged={false}>
-            <Login />
-          </AuthRedirect>
-        }
-      />
-      <Route path="/new-account" element={<CreateAccount />} />
-      <Route path="/register" element={<Register />} /> */}
-
-      {/* Admin */}
       <Route
-        path="/*"
+        path="/"
+        element={<ShouldNotBeLogged>{/* <Login /> */}</ShouldNotBeLogged>}
+      />
+
+      <Route path="/" element={<Navigate to="/reset-password" />} />
+      <Route
+        path="Dashboard/*"
         element={
-          <AuthRedirect
-            shouldBeLogged={true}
-            allowedRoles={["super_admin", "admin"]}
-          >
+          <ShouldBeLogged>
             <React.Suspense fallback={<Loader />}>
-              {/* <DashboardRouting /> */}
-              <ReactQueryDevtools initialIsOpen={false} />
+              <QueryClientProvider client={queryClient}>
+                {/* <DashboardRouting /> */}
+                <ReactQueryDevtools initialIsOpen={false} />
+              </QueryClientProvider>
             </React.Suspense>
-          </AuthRedirect>
+          </ShouldBeLogged>
         }
       />
     </Routes>
